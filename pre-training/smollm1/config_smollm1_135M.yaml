@@ -68,10 +68,10 @@ optimizer:
   clip_grad: 1.0
   learning_rate_scheduler:
     learning_rate: 0.003
-    lr_decay_starting_step: 250000
-    lr_decay_steps: 50000
-    lr_decay_style: 1-sqrt
-    lr_warmup_steps: 2500
+    lr_decay_starting_step: 1600000
+    lr_decay_steps: 400000
+    lr_decay_style: linear
+    lr_warmup_steps: 2000
     lr_warmup_style: linear
     min_decay_lr: 0
   optimizer_factory:
@@ -83,7 +83,7 @@ optimizer:
   weight_decay: 0.01
   zero_stage: 0
 parallelism:
-  dp: 32 # 4 nodes
+  dp: 64 # 8 nodes
   expert_parallel_size: 1
   pp: 1
   pp_engine: 1f1b
@@ -98,10 +98,10 @@ tokenizer:
   tokenizer_name_or_path: HuggingFaceTB/cosmo2-tokenizer
   tokenizer_revision: null
 tokens:
-  batch_accumulation_per_replica: 2
+  batch_accumulation_per_replica: 1
   limit_test_batches: 0
   limit_val_batches: 0
-  micro_batch_size: 8 # GBS = 8*2*32*sequence_length = 512*sequence_length = 1M tokens
+  micro_batch_size: 8 # GBS = 8*1*64*sequence_length = 512*sequence_length = 1M tokens
   sequence_length: 2048
-  train_steps: 600000
+  train_steps: 2000000
   val_check_interval: -1
