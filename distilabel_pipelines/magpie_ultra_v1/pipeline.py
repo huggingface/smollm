@@ -342,7 +342,7 @@ Now, please output your tags below in a json format by filling in the placeholde
     "other_tags": ["<tag 1>", "<tag 2>", ... ]
 }}
 ```
-"""
+""".lstrip()
 
 
 OUTPUT_CLASSIFICATION_JSON_SCHEMA = {
