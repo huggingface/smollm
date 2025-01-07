@@ -9,7 +9,7 @@ import requests
 import webbrowser
 
 @tool
-def get_random_number_between(min: int, max: int) -> int:
+def get_random_number_between(min: int, max: int) -> str:
     """
     Gets a random number between min and max.
 
@@ -20,7 +20,7 @@ def get_random_number_between(min: int, max: int) -> int:
     Returns:
         A random number between min and max.
     """
-    return random.randint(min, max)
+    return f"{random.randint(min, max):d}"
 
 
 @tool
@@ -91,9 +91,9 @@ class SmolToolAgent(SmolTool):
         return output
 
     def _get_system_prompt(self) -> str:
-        return """You are an expert in composing functions. You are given a question and a set of possible functions. 
-Based on the question, you will need to make one or more function/tool calls to achieve the purpose. 
-If none of the functions can be used, point it out and refuse to answer. 
+        return """You are an expert in composing functions. You are given a question and a set of possible functions.
+Based on the question, you will need to make one or more function/tool calls to achieve the purpose.
+If none of the functions can be used, point it out and refuse to answer.
 If the given question lacks the parameters required by the function, also point it out.
 
 You have access to the following tools:
@@ -144,4 +144,4 @@ The example format is as follows. Please make sure the parameter type is correct
 
         # Yield each tool response
         for response in tool_responses:
-            yield str(response) 
+            yield str(response)
