@@ -3,8 +3,7 @@
 Welcome to Smol Models, a family of efficient and lightweight AI models from Hugging Face. Our mission is to create powerful yet compact models, for text and vision, that can run effectively on-device while maintaining strong performance.
 
 **News 📰**
-- **Introducing [FineMath](https://huggingface.co/datasets/HuggingFaceTB/finemath), the best public math pretraining dataset 🚀**
-- Added continual pretraining code for Llama 3.2 3B on FineMath & FineWeb-Edu with `nanotron`
+- We just released SmolLM2 paper: https://arxiv.org/abs/2502.02737 
 
 ## 💬 SmolLM2 (Language Model)
 [SmolLM2](https://huggingface.co/collections/HuggingFaceTB/smollm2-6723884218bcda64b34d7db9) is our family of compact language models available in three sizes:
