@@ -130,6 +130,7 @@ TASKS_TABLE = [
         hf_repo="allenai/openbookqa",
         hf_subset="main",
         hf_revision="388097ea7776314e93a529163e0fea805b8a6454",
+        evaluation_splits=["test"],
         metric=[Metrics.loglikelihood_acc_norm_nospace],
     ),
     LightevalTaskConfig(
@@ -139,6 +140,8 @@ TASKS_TABLE = [
         hf_repo="Rowan/hellaswag",
         hf_subset="default",
         hf_revision="6002345709e0801764318f06bf06ce1e7d1a1fe3",
+        evaluation_splits=["validation"],
+        hf_avail_splits=["validation"],
         trust_dataset=True,
         metric=[Metrics.loglikelihood_acc_norm_nospace],
     ),
@@ -259,7 +262,6 @@ BBH_TASKS = [
         hf_revision="80610173426f05e6f1448f047e2db4840a7dd899",
         metric=[Metrics.exact_match],
         hf_avail_splits=["train"],
-        # this is the only split available, obviously not used in training
         evaluation_splits=["train"],
         few_shots_split="train",
         trust_dataset=True,
@@ -332,15 +334,95 @@ MATH_TASKS = [
 
 TASKS_TABLE.extend(MATH_TASKS)
 
-from lighteval.tasks.multilingual.tasks import xcsqa_tasks, mlmm_hellaswag_tasks, belebele_tasks
-
-TASKS_TABLE.extend(
-    [
-        *xcsqa_tasks,
-        *mlmm_hellaswag_tasks,
-        *belebele_tasks,
-    ]
+from lighteval.tasks.multilingual.tasks import (
+    xcsqa_tasks, belebele_tasks, arabic_mmlu_tasks,
+    arabic_ledarboard_arc_easy, soqal_tasks, piqa_ar_tasks,
+    race_ar_task, sciqa_ar_task, xcodah_tasks,
+    xstory_tasks, agieval_tasks_zh, c3_tasks,
+    ceval_tasks, cmmlu_tasks, mlmm_hellaswag_tasks,
+    m3exams_tasks, xcopa_tasks, xwinograd_tasks,
+    meta_mmlu_tasks, fquad_v2_tasks, mintaka_tasks,
+    hindi_arc_tasks, mlmm_arc_challenge_tasks, rummlu,
+    parus_tasks, openbook_rus_tasks, xstory_tasks,
+    hellaswag_tha_tasks, thai_exams_tasks, mlmm_mmlu_tasks,
+    # jmmlu_tasks,
 )
+
+from lighteval.metrics.dynamic_metrics import loglikelihood_acc_metric
+from lighteval.metrics.normalizations import LogProbPMINorm, LogProbTokenNorm
+
+# tasks that should use PMI normalization based on FineWeb2
+pmi_finetasks = [
+    # Arabic
+    "xcsqa_ara_", "arabicmmlu_ara_", "mmlu_ara_",
+    # Chinese
+    "xcsqa_zho_", "agieval_zho_", "cmmlu_zho_",
+    # French
+    "meta_mmlu_fra_", "xcsqa_fra_", "mlmm_arc_fra_",
+    # Hindi
+    "meta_mmlu_hin_", "xcsqa_hin_",
+    # Russian
+    "mlmm_arc_rus_", "rummlu_rus_", "xcsqa_rus_",
+    # Thai
+    "meta_mmlu_tha_",
+    # German
+    "meta_mmlu_deu_", "mlmm_arc_deu_", "xcsqa_deu_",
+    # Italian
+    "meta_mmlu_ita_", "mlmm_arc_ita_", "xcsqa_ita_",
+    # Japanese
+    "xcsqa_jpn_",
+    # Vietnamese
+    "mlmm_arc_vie_", "mlmm_mmlu_vie_", "xcsqa_vie_"
+]
+
+multilingual_configs = [
+    (xcsqa_tasks, ["ara_cf", "zho_cf", "fra_cf", "hin_cf", "rus_cf", "deu_cf", "ita_cf", "jpn_cf", "vie_cf"]),
+    (belebele_tasks, ["arb_Arab_cf", "zho_Hans_cf", "fra_Latn_cf", "hin_Deva_cf", "rus_Cyrl_cf", "tha_Thai_cf",
+                      "deu_Latn_cf", "ita_Latn_cf", "jpn_Jpan_cf", "vie_Latn_cf"]),
+    (arabic_mmlu_tasks, ["mmlu_ara_cf:"]),
+    (arabic_ledarboard_arc_easy, ["alghafa_arc_ara_cf:easy"]),
+    (soqal_tasks, ["soqal_ara_cf"]),
+    (piqa_ar_tasks, ["alghafa_piqa_ara_cf"]),
+    (race_ar_task, ["alghafa_race_ara_cf"]),
+    (sciqa_ar_task, ["alghafa_sciqa_ara_cf"]),
+    (xcodah_tasks, ["ara_cf", "zho_cf", "fra_cf", "hin_cf", "rus_cf", "deu_cf", "ita_cf", "jpn_cf", "vie_cf"]),
+    (xstory_tasks, ["ara_cf", "zho_cf", "hin_cf", "rus_cf"]),
+    (agieval_tasks_zh, ["agieval_zho_cf:"]),
+    (c3_tasks, ["c3_zho_cf"]),
+    (ceval_tasks, ["ceval_zho_cf:"]),
+    (cmmlu_tasks, ["cmmlu_zho_cf:"]),
+    (mlmm_hellaswag_tasks, ["mlmm_hellaswag_zho_cf", "mlmm_hellaswag_fra_cf", "mlmm_hellaswag_hin_cf",
+                            "mlmm_hellaswag_rus_cf", "mlmm_hellaswag_tha_cf", "mlmm_hellaswag_deu_cf",
+                            "mlmm_hellaswag_ita_cf", "mlmm_hellaswag_vie_cf"]),
+    (m3exams_tasks, ["m3exams_zho_cf", "m3exams_tha_cf", "m3exams_ita_cf", "m3exams_vie_cf"]),
+    (xcopa_tasks, ["xcopa_zho_cf", "xcopa_rus_cf", "xcopa_ita_cf", "xcopa_vie_cf"]),
+    (xwinograd_tasks, ["xwinograd_zho_cf", "xwinograd_rus_cf", "xwinograd_jpn_cf"]),
+    (meta_mmlu_tasks,
+     ["meta_mmlu_fra_cf", "meta_mmlu_hin_cf", "meta_mmlu_tha_cf", "meta_mmlu_deu_cf", "meta_mmlu_ita_cf"]),
+    (hindi_arc_tasks, ["community_arc_hin_cf"]),
+    (mlmm_arc_challenge_tasks, ["mlmm_arc_rus_cf:challenge", "mlmm_arc_deu_cf:challenge", "mlmm_arc_ita_cf:challenge",
+                                "mlmm_arc_vie_cf:challenge"]),
+    (rummlu, ["rummlu_rus_cf"]),
+    (parus_tasks, ["parus_rus_cf"]),
+    (openbook_rus_tasks, ["mera_openbookqa_rus_cf"]),
+    (hellaswag_tha_tasks, ["community_hellaswag_tha_cf"]),
+    (thai_exams_tasks, ["thai_exams_tha_cf"]),
+    (mlmm_mmlu_tasks, ["mlmm_mmlu_vie_cf"]),
+]
+
+for task_collection, patterns in multilingual_configs:
+    for task in task_collection:
+        for pattern in patterns:
+            if pattern in task.name:
+                # finetask_pmi = any(pmi_pattern in task.name for pmi_pattern in pmi_finetasks)
+                #
+                # if finetask_pmi:
+                #     task.metric = [loglikelihood_acc_metric(normalization=LogProbPMINorm())]
+                # else:
+                #     task.metric = [loglikelihood_acc_metric(normalization=LogProbTokenNorm())]
+
+                TASKS_TABLE.append(task)
+                break
 
 
 if __name__ == "__main__":
