@@ -18,7 +18,7 @@ Training Configuration: We use a global batch size of 2.36M tokens with 4096 seq
 
 ## Setup
 
-Please refer to [nanotron](https://github.com/huggingface/nanotron/) for detailed instructions on setting up your training environment and launching jobs. For SmolLM3 we use this [branch](https://github.com/huggingface/nanotron/tree/smollm3).
+Please refer to [nanotron](https://github.com/huggingface/nanotron/) for detailed instructions on setting up your training environment and launching jobs. For SmolLM3 we use this [branch](https://github.com/huggingface/nanotron/tree/smollm3) and this [branch](https://github.com/huggingface/datatrove/tree/nouamane/avoid-s3) of [datatrove](https://github.com/huggingface/datatrove).
 
 After setting up the environment and tokenizing the training datasets with [datatrove](https://github.com/huggingface/datatrove) (instructions available [here](https://github.com/huggingface/nanotron/blob/main/docs/nanoset.md#nanosets)), you can modify the configurations to match your number of nodes and local paths.
 
