@@ -16,3 +16,6 @@ jobs:
           fetch-depth: 0
       - name: Secret Scanning
         uses: trufflesecurity/trufflehog@main
+        with:
+          # Skip scanning for JSONL files since they are datasets
+          extra_args: --debug --exclude-globs="**.jsonl"
