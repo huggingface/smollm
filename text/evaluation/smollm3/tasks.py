@@ -99,7 +99,6 @@ arc_tasks = [
         hf_repo="allenai/ai2_arc",
         hf_subset=f"ARC-{subset}",
         hf_revision="210d026faf9955653af8916fad021475a3f00453",
-        trust_dataset=True,
         evaluation_splits=("test",),
         few_shots_split="train",
         metric=get_metrics_for_formulation(formulation, qa_metrics),
@@ -153,7 +152,6 @@ hellaswag_tasks = [
         hf_revision="6002345709e0801764318f06bf06ce1e7d1a1fe3",
         evaluation_splits=["validation"],
         hf_avail_splits=["train", "validation"],
-        trust_dataset=True,
         metric=get_metrics_for_formulation(formulation, qa_metrics),
     )
     for formulation in all_qa_formulations
@@ -224,8 +222,7 @@ winogrande_tasks = [
         ),
         hf_repo="allenai/winogrande",
         hf_subset="winogrande_xl",
-        trust_dataset=True,
-        hf_revision="85ac5b5a3b7a930e22d590176e39460400d19e41",
+        hf_revision="01e74176c63542e6b0bcb004dcdea22d94fb67b5",
         hf_avail_splits=["train", "validation"],
         evaluation_splits=["validation"],
         few_shots_split="train",
@@ -250,9 +247,8 @@ piqa_tasks = [
         ),
         suite=["custom"],
         hf_repo="ybisk/piqa",
-        hf_revision="2e8ac2dffd59bac8c3c6714948f4c551a0848bb0",
+        hf_revision="ba2f7a4920f4968f04c174c53cc157c899e93501",  # PR
         hf_subset="plain_text",
-        trust_dataset=True,
         hf_avail_splits=["train", "validation"],
         evaluation_splits=["validation"],
         few_shots_split="train",
@@ -278,9 +274,8 @@ siqa_tasks = [
         ),
         suite=["custom"],
         hf_repo="allenai/social_i_qa",
-        hf_revision="53620e5841fb12b08e082485797e7021d3684ea2",
+        hf_revision="aaaad979029e0df5946111799787313c99c03510",  # PR
         hf_subset="default",
-        trust_dataset=True,
         hf_avail_splits=["train", "validation"],
         evaluation_splits=["validation"],
         few_shots_split="train",
@@ -326,7 +321,6 @@ mmlu_tasks = [
         hf_repo="cais/mmlu",
         hf_subset=subset,
         hf_revision="c30699e8356da336a370243923dbaf21066bb9fe",
-        trust_dataset=True,
         evaluation_splits=("test",),
         few_shots_split="dev",
         metric=get_metrics_for_formulation(formulation, qa_metrics),
@@ -352,8 +346,7 @@ mmlu_pro_tasks = [
         suite=("custom",),
         hf_repo="TIGER-Lab/MMLU-Pro",
         hf_subset="default",
-        hf_revision="3373e0b32277875b8db2aa555a333b78a08477ea",
-        trust_dataset=True,
+        hf_revision="9126953e3e196ff1073499437322f9e2c51ed79a",
         evaluation_splits=("test",),
         few_shots_split="validation",
         metric=get_metrics_for_formulation(formulation, qa_metrics),
@@ -417,7 +410,6 @@ bbh_tasks = [
         hf_avail_splits=["train"],
         evaluation_splits=["train"],
         few_shots_split="train",
-        trust_dataset=True,
         stop_sequence=["Question:"],
     )
     for subset in BBH_SUBSETS
@@ -464,6 +456,7 @@ math_tasks = [
         prompt_function=prompt.math_cot,
         hf_repo="DigitalLearningGmbH/MATH-lighteval",
         hf_subset=config,
+        hf_revision="0530c78699ea5e8eb5530600900e1f328b48acad",
         hf_avail_splits=["train", "test"],
         evaluation_splits=["test"],
         few_shots_split="train",
@@ -471,7 +464,6 @@ math_tasks = [
         generation_size=4096,
         metric=[latex_gold_metric],
         stop_sequence=["\n"],
-        trust_dataset=True,
         version=0,
     )
     for config in [
@@ -696,6 +688,7 @@ gsm_plus = LightevalTaskConfig(
     prompt_function=gsm_plus_prompt,
     hf_repo="qintongli/GSM-Plus",
     hf_subset="default",
+    hf_revision="3b708db57b96a16e8e3368ed2956990c0809440e",
     hf_avail_splits=["testmini"],
     evaluation_splits=["testmini"],
     few_shots_split=None,
@@ -705,7 +698,6 @@ gsm_plus = LightevalTaskConfig(
         Metrics.math_pass_at_1_1n,
     ],
     stop_sequence=None,
-    trust_dataset=True,
     version=0,
 )
 
