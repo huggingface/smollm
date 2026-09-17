@@ -1,0 +1,18 @@
+[package]
+name = "candle_smollm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+candle = { git = "https://github.com/huggingface/candle", package = "candle-core" }
+candle-nn = { git = "https://github.com/huggingface/candle" }
+candle-transformers = { git = "https://github.com/huggingface/candle" }
+safetensors = "0.4.2"
+serde = { version = "1.0.196", features = ["derive"] }
+serde_json = "1.0.113"
+anyhow = "1.0.86"
+hf-hub = "0.3.0"
+clap = { version = "4.0", features = ["derive"] }
+tracing-subscriber = "0.2.16"
+tokenizers = "0.19.0"
+tracing-chrome = "0.1.0"
