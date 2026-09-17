@@ -26,10 +26,22 @@ All commands below were run on 2 x H100s with 80GB of memory each, using the `vl
 MODEL_ARGS="model_name=HuggingFaceTB/SmolLM3-3B-Base,dtype=bfloat16,max_model_length=32768,max_num_batched_tokens=32768,generation_parameters={temperature:0},tensor_parallel_size=2,gpu_memory_utilization=0.7"
 lighteval vllm \
     "$MODEL_ARGS" \
-    "smollm3_base_test.txt" \
+    "smollm3_base.txt" \
     --custom-tasks "tasks.py" \
     --output-dir "evals/" \
     --save-details
+```
+
+The [SmolLM3 blog](https://huggingface.co/blog/smollm3) reports HumanEval+ and MBPP+ for the base-model win-rate comparison. LightEval does not ship those tasks, so they are defined as custom tasks in `tasks.py` (`custom|humaneval_plus` and `custom|mbpp_plus`) and included in `smollm3_base.txt`.
+
+They use completion-style prompts and greedy `pass@1` against the extra EvalPlus tests (`evalplus/humanevalplus`, `evalplus/mbppplus`). Code is executed locally in a subprocess; only run this with the official eval datasets.
+
+To reproduce the same suite with the EvalPlus CLI instead of LightEval:
+
+```sh
+pip install "evalplus[vllm]"
+evalplus.evaluate --model HuggingFaceTB/SmolLM3-3B-Base --dataset humaneval --backend vllm --greedy
+evalplus.evaluate --model HuggingFaceTB/SmolLM3-3B-Base --dataset mbpp --backend vllm --greedy
 ```
 
 ### SmolLM3-3B mid-trained model

@@ -40,6 +40,7 @@ from lighteval.metrics.metrics_sample import (
 from lighteval.metrics.normalizations import LogProbCharNorm, LogProbTokenNorm
 from lighteval.metrics.utils.metric_utils import (
     MetricUseCase,
+    SampleLevelMetric,
     SampleLevelMetricGrouping,
 )
 from lighteval.tasks.default_prompts import LETTER_INDICES
@@ -67,6 +68,25 @@ from lighteval.tasks.templates.utils.formulation import (
 )
 from lighteval.utils.language import Language
 from lighteval.utils.utils import remove_reasoning_tags
+
+try:
+    from .evalplus_utils import (
+        HUMAN_EVAL_STOP_SEQUENCES,
+        MBPP_STOP_SEQUENCES,
+        evaluate_humaneval_plus,
+        evaluate_mbpp_plus,
+        humaneval_plus_query,
+        mbpp_plus_query,
+    )
+except ImportError:
+    from evalplus_utils import (
+        HUMAN_EVAL_STOP_SEQUENCES,
+        MBPP_STOP_SEQUENCES,
+        evaluate_humaneval_plus,
+        evaluate_mbpp_plus,
+        humaneval_plus_query,
+        mbpp_plus_query,
+    )
 
 TASKS_TABLE = []
 TASKS_TABLE.extend(ML_TASKS_TABLE)
@@ -442,6 +462,115 @@ gsm8k_tasks = [
     )
 ]
 TASKS_TABLE.extend(gsm8k_tasks)
+
+# HumanEval+ / MBPP+ (blog base-model code evals; not shipped by LightEval)
+def humaneval_plus_prompt(line, task_name: str = None):
+    return Doc(
+        task_name=task_name,
+        query=humaneval_plus_query(line),
+        choices=[line.get("canonical_solution") or ""],
+        gold_index=0,
+        specific={
+            "prompt": line["prompt"],
+            "test": line["test"],
+            "entry_point": line["entry_point"],
+        },
+    )
+
+
+def mbpp_plus_prompt(line, task_name: str = None):
+    return Doc(
+        task_name=task_name,
+        query=mbpp_plus_query(line),
+        choices=[line.get("code") or ""],
+        gold_index=0,
+        specific={
+            "test": line["test"],
+            "test_imports": line.get("test_imports") or [],
+        },
+    )
+
+
+def humaneval_plus_metric(predictions: list[str], formatted_doc: Doc, **kwargs) -> float:
+    prediction = predictions[0] if predictions else ""
+    spec = formatted_doc.specific or {}
+    return float(
+        evaluate_humaneval_plus(
+            prompt=spec["prompt"],
+            prediction=prediction,
+            test=spec["test"],
+            entry_point=spec["entry_point"],
+        )
+    )
+
+
+def mbpp_plus_metric(predictions: list[str], formatted_doc: Doc, **kwargs) -> float:
+    prediction = predictions[0] if predictions else ""
+    spec = formatted_doc.specific or {}
+    return float(
+        evaluate_mbpp_plus(
+            prediction=prediction,
+            test=spec["test"],
+            test_imports=spec.get("test_imports") or [],
+        )
+    )
+
+
+humaneval_plus_pass_at_1 = SampleLevelMetric(
+    metric_name="humaneval_plus_pass@1",
+    higher_is_better=True,
+    category=MetricCategory.GENERATIVE,
+    use_case=MetricUseCase.CODE,
+    sample_level_fn=humaneval_plus_metric,
+    corpus_level_fn=np.mean,
+)
+
+mbpp_plus_pass_at_1 = SampleLevelMetric(
+    metric_name="mbpp_plus_pass@1",
+    higher_is_better=True,
+    category=MetricCategory.GENERATIVE,
+    use_case=MetricUseCase.CODE,
+    sample_level_fn=mbpp_plus_metric,
+    corpus_level_fn=np.mean,
+)
+
+humaneval_plus = LightevalTaskConfig(
+    name="humaneval_plus",
+    suite=["custom"],
+    prompt_function=humaneval_plus_prompt,
+    hf_repo="evalplus/humanevalplus",
+    hf_subset="default",
+    hf_revision="d32357cf319e50e9c8d8dab5ea876c72b0fd321b",
+    hf_avail_splits=["test"],
+    evaluation_splits=["test"],
+    few_shots_split=None,
+    few_shots_select=None,
+    generation_size=512,
+    metric=[humaneval_plus_pass_at_1],
+    stop_sequence=HUMAN_EVAL_STOP_SEQUENCES,
+    trust_dataset=True,
+    version=0,
+)
+
+mbpp_plus = LightevalTaskConfig(
+    name="mbpp_plus",
+    suite=["custom"],
+    prompt_function=mbpp_plus_prompt,
+    hf_repo="evalplus/mbppplus",
+    hf_subset="default",
+    hf_revision="b2d74c91837c3f2a20c1299ae98133cbe7cfa077",
+    hf_avail_splits=["test"],
+    evaluation_splits=["test"],
+    few_shots_split=None,
+    few_shots_select=None,
+    generation_size=512,
+    metric=[mbpp_plus_pass_at_1],
+    stop_sequence=MBPP_STOP_SEQUENCES,
+    trust_dataset=True,
+    version=0,
+)
+
+TASKS_TABLE.extend([humaneval_plus, mbpp_plus])
 
 # MATH tasks
 latex_gold_metric = multilingual_extractive_match_metric(
