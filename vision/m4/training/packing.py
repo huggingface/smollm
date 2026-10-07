@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # Hyper-parameters
 _IMAGE_BONUS_VALUE = 2  # The bonus value for tokens preceding the image token
 _MIN_LENGTH_DOCUMENTS_TO_PACK = (
-    5  # Minimum lengths of documents to pack together (lenghts is measures in number of tokens)
+    5  # Minimum lengths of documents to pack together (lengths are measured in number of tokens)
 )
 RANDOM_LINE_BREAK_PROB = 0.05
 

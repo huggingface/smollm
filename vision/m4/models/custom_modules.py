@@ -120,7 +120,7 @@ class VLOOMPreTrainedModelBase(PreTrainedModel):
 
         # 1. We load a trained checkpoint but we are not resuming a training:
         # If the model is from_hub or from_path, the language model is loaded as well, and
-        # the uninitialized vision_model is overriden by the checkpoint's weights (i.e. idefics' weights)```
+        # the uninitialized vision_model is overridden by the checkpoint's weights (i.e. idefics' weights)```
         if is_pretrained_vloom_model_from_hub_or_path:
             model = super().from_pretrained(*model_args, **kwargs)
 

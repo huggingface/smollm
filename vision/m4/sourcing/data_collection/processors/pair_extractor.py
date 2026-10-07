@@ -104,10 +104,10 @@ class TextMediaPairsExtractor:
                     media_info[f"clip_score_image_{text_key}"] = clip_scores[idx]
                     idx += 1
         except ValueError:
-            logger.warning(f"ValueError occured while computing CLIP scores for image ({media_info}). Skipping image.")
+            logger.warning(f"ValueError occurred while computing CLIP scores for image ({media_info}). Skipping image.")
         except Exception as exception:
             logger.error(
-                f"Error *{exception}* occured while computing CLIP scores for image ({media_info}). Use at your own"
+                f"Error *{exception}* occurred while computing CLIP scores for image ({media_info}). Use at your own"
                 " risk."
             )
 
