@@ -71,12 +71,12 @@ class IdeficsVisionConfig(PretrainedConfig):
             self.embed_dim = vision_config.hidden_size
 
         # Image size is always the size of the vision_model_name config.
-        # It will be overriden if image_size is provided
+        # It will be overridden if image_size is provided
         if image_size is not None and hasattr(vision_config, "image_size"):
             self.image_size = image_size
             if image_size != vision_config.image_size:
                 logger.warning(
-                    f"The vision model image_size {vision_config.image_size} is being overriden by the new image_size"
+                    f"The vision model image_size {vision_config.image_size} is being overridden by the new image_size"
                     f" {self.image_size}"
                 )
         elif hasattr(vision_config, "image_size"):

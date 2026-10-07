@@ -7,7 +7,7 @@ Welcome to Smol Models, a family of efficient and lightweight AI models from Hug
 
 Our 3B model outperforms Llama 3.2 3B and Qwen2.5 3B while staying competitive with larger 4B alternatives (Qwen3 & Gemma3). Beyond the performance numbers, we're sharing exactly how we built it using public datasets and training frameworks.
 
-Ressources:
+Resources:
 - [SmolLM3-Base](https://hf.co/HuggingFaceTB/SmolLM3-3B-Base)
 - [SmolLM3](https://hf.co/HuggingFaceTB/SmolLM3-3B)
 - [blog](https://hf.co/blog/smollm3)

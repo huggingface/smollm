@@ -24,7 +24,7 @@ sbatch launch.slurm
 
 ## Continual pre-training
 
-The nanotron checkpoints for SmolLM2 models are available at: https://huggingface.co/HuggingFaceTB/SmolLM2-nanotron-ckpt. SmolLM3 `transformers` format checkpoint are availble here https://huggingface.co/HuggingFaceTB/SmolLM3-3B-checkpoints.
+The nanotron checkpoints for SmolLM2 models are available at: https://huggingface.co/HuggingFaceTB/SmolLM2-nanotron-ckpt. SmolLM3 `transformers` format checkpoints are available here https://huggingface.co/HuggingFaceTB/SmolLM3-3B-checkpoints.
 
 You can find an example of continual pre-training in the [continual-pretraining](./continual-pretraining) folder.
 
