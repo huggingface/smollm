@@ -9,6 +9,8 @@ custom|openbookqa_cf|0|1
 custom|piqa_cf|0|1
 custom|gsm8k|5|1
 custom|math_cot|4|1
+custom|humaneval_plus|0|0
+custom|mbpp_plus|0|0
 
 lighteval|belebele_arb_Arab_cf|0|1
 lighteval|belebele_rus_Cyrl_cf|0|1
