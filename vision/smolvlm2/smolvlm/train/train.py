@@ -320,7 +320,7 @@ def train():
 
     # 4) Possibly apply LoRA/PEFT
     if training_args.peft_enable:
-        model = apply_peft_if_needed(model, training_args)
+        model = apply_peft(model, training_args)
 
     # 5) Load processor (tokenizer + image processor, etc.)
     #import ipdb; ipdb.set_trace()
